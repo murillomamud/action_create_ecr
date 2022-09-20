@@ -1,0 +1,31 @@
+name: Default Pipeline
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    name: Setup  
+    steps:
+      - uses: actions/checkout@v3
+
+
+  ecr-create:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    name: ECR Repository Create
+    steps:
+      - name: ECR Repository create
+        id: create-ecr      
+        uses: murillomamud/action_create_ecr@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          repo_name: test
+          account_number: ${{ secrets.AWS_ACCOUNT_ID }}
+      - name: Get URI
+        run: echo "Repository URI is ${{ steps.create-ecr.outputs.repo_uri }}"
+  

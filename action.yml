@@ -1,0 +1,28 @@
+# action.yml
+name: 'ECR Create'
+description: 'Create ECR Repository'
+inputs:
+  access_key: 
+    description: 'AWS Access Key'
+    required: true
+  secret_key: 
+    description: 'AWS Secret Key'
+    required: true    
+  repo_name:  
+    description: 'ECR Repository name'
+    required: true
+    default: ''
+  account_number: 
+    description: 'AWS Account Number'
+    required: true    
+outputs:
+  repo_uri: 
+    description: 'REPOSITORY URI'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.access_key }}
+    - ${{ inputs.secret_key }}
+    - ${{ inputs.repo_name }}
+    - ${{ inputs.account_number }}
